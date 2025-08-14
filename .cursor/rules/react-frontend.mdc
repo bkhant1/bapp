@@ -1,0 +1,75 @@
+# React TypeScript Frontend Standards
+
+## Technology Stack
+- **React 18** with TypeScript
+- **Material-UI (MUI)** for UI components
+- **React Router** for navigation
+- **Axios** for API calls
+- Reference: [frontend/package.json](mdc:frontend/package.json)
+
+## Code Style
+- Use TypeScript for all new components
+- Use functional components with hooks
+- Use arrow functions for component definitions
+- Use semicolons consistently
+- Use double quotes for strings
+- Use 2-space indentation
+
+## Component Structure
+```typescript
+import React from 'react';
+import { SomeType } from './types';
+
+interface Props {
+  title: string;
+  optional?: boolean;
+}
+
+const MyComponent: React.FC<Props> = ({ title, optional = false }) => {
+  // Component logic here
+  
+  return (
+    <div>
+      {/* JSX here */}
+    </div>
+  );
+};
+
+export default MyComponent;
+```
+
+## API Integration
+- Use Axios for HTTP requests
+- Create API service files for different modules
+- Use TypeScript interfaces for API responses
+- Handle loading and error states consistently
+- Base API URL should be from environment variable: `REACT_APP_API_URL`
+
+## Styling
+- Use Material-UI components and styling system
+- Use `sx` prop for component-specific styles
+- Create theme customizations in a central theme file
+- Avoid inline styles unless absolutely necessary
+
+## State Management
+- Use React hooks (useState, useEffect, useContext) for local state
+- Consider React Context for global state that doesn't require external library
+- Use custom hooks for reusable stateful logic
+
+## File Organization
+- Components in `src/components/`
+- Pages/Views in `src/pages/`
+- Custom hooks in `src/hooks/`
+- API services in `src/services/`
+- Types/interfaces in `src/types/`
+- Utils in `src/utils/`
+
+## Environment Variables
+- Prefix all environment variables with `REACT_APP_`
+- Store API URLs and configuration in environment variables
+- Use different `.env` files for different environments
+
+## Build and Deployment
+- Production builds are containerized with Nginx
+- Nginx configuration: [frontend/nginx.conf](mdc:frontend/nginx.conf)
+- Docker build: [frontend/Dockerfile](mdc:frontend/Dockerfile)

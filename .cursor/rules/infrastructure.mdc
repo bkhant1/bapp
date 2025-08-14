@@ -1,0 +1,76 @@
+# Infrastructure and Deployment Standards
+
+## Terraform (Google Cloud)
+- All infrastructure is defined in [infra/](mdc:infra/) directory
+- Main configuration: [infra/main.tf](mdc:infra/main.tf)
+- Variables: [infra/variables.tf](mdc:infra/variables.tf)
+- Outputs: [infra/outputs.tf](mdc:infra/outputs.tf)
+- Example variables: [infra/terraform.tfvars.example](mdc:infra/terraform.tfvars.example)
+
+### Resources Created
+- **Cloud Run** services for backend and frontend
+- **Cloud SQL** PostgreSQL database
+- **Cloud Storage** bucket for media files
+- **VPC** network with private connectivity
+- **VPC Access Connector** for Cloud Run to Cloud SQL communication
+
+### Best Practices
+- Use descriptive resource names with project prefix
+- Include proper dependencies with `depends_on`
+- Use variables for all configurable values
+- Include comprehensive outputs for other systems
+- Enable required APIs before creating resources
+
+## Docker
+- **Backend**: [backend/Dockerfile](mdc:backend/Dockerfile) - Production Django container
+- **Frontend**: [frontend/Dockerfile](mdc:frontend/Dockerfile) - Multi-stage React build with Nginx
+- **Development**: [docker-compose.yml](mdc:docker-compose.yml) - Local development environment
+
+### Docker Best Practices
+- Use multi-stage builds for frontend
+- Create non-root users for security
+- Use specific base image versions
+- Minimize layer count and image size
+- Use `.dockerignore` files to exclude unnecessary files
+
+## CI/CD (GitHub Actions)
+- Pipeline configuration: [.github/workflows/ci-cd.yml](mdc:.github/workflows/ci-cd.yml)
+- Runs tests for both backend and frontend
+- Builds and pushes Docker images to Google Container Registry
+- Deploys to Cloud Run on main branch pushes
+- Runs Terraform plan/apply for infrastructure changes
+
+### Required Secrets
+- `GCP_PROJECT_ID` - Google Cloud project ID
+- `GCP_SA_KEY` - Service account key JSON for authentication
+- `DATABASE_URL` - Production database connection string
+- `DATABASE_PASSWORD` - Database password for Terraform
+- `GCS_BUCKET_NAME` - Google Cloud Storage bucket name
+
+## Local Development
+- Use [docker-compose.yml](mdc:docker-compose.yml) for local development
+- PostgreSQL and Redis services included
+- Hot reloading for both backend and frontend
+- Environment variables configured for local development
+
+### Commands
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f [service_name]
+
+# Stop all services
+docker-compose down
+
+# Rebuild services
+docker-compose up --build
+```
+
+## Environment Management
+- **Development**: Use docker-compose with local database
+- **Production**: Google Cloud Run with Cloud SQL
+- Environment variables are managed through:
+  - Local: `.env` files (not committed)
+  - Production: GitHub Secrets and Terraform variables

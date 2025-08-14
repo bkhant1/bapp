@@ -1,0 +1,44 @@
+---
+alwaysApply: true
+---
+
+# BookExchange Project Structure
+
+This is a full-stack book exchange social network with the following structure:
+
+## Main Directories
+- [backend/](mdc:backend/) - Django-Ninja API server with PostgreSQL
+- [frontend/](mdc:frontend/) - React TypeScript application with Material-UI
+- [infra/](mdc:infra/) - Terraform infrastructure for Google Cloud deployment
+- [.github/workflows/](mdc:.github/workflows/) - GitHub Actions CI/CD pipelines
+
+## Key Configuration Files
+- [docker-compose.yml](mdc:docker-compose.yml) - Local development environment
+- [README.md](mdc:README.md) - Project documentation and setup instructions
+- [.gitignore](mdc:.gitignore) - Git ignore patterns for all stack components
+
+## Backend Structure
+- [backend/bookexchange/settings.py](mdc:backend/bookexchange/settings.py) - Django configuration
+- [backend/bookexchange/urls.py](mdc:backend/bookexchange/urls.py) - Main URL routing with Django-Ninja API
+- [backend/requirements.txt](mdc:backend/requirements.txt) - Python dependencies
+- [backend/Dockerfile](mdc:backend/Dockerfile) - Production Docker container
+- [backend/env.template](mdc:backend/env.template) - Environment variables template
+
+## Frontend Structure
+- [frontend/package.json](mdc:frontend/package.json) - Node.js dependencies and scripts
+- [frontend/Dockerfile](mdc:frontend/Dockerfile) - Production Docker container
+- [frontend/nginx.conf](mdc:frontend/nginx.conf) - Nginx configuration for serving React app
+
+## Infrastructure
+- [infra/main.tf](mdc:infra/main.tf) - Main Terraform configuration
+- [infra/variables.tf](mdc:infra/variables.tf) - Terraform input variables
+- [infra/outputs.tf](mdc:infra/outputs.tf) - Terraform outputs
+- [infra/terraform.tfvars.example](mdc:infra/terraform.tfvars.example) - Example variables file
+
+## Django Apps
+Each Django app follows the standard structure with models, views (API), and migrations:
+- `accounts/` - User management and authentication
+- `books/` - Book catalog and user collections
+- `friendships/` - Social connections and friend requests
+- `exchanges/` - Book exchange system
+- `messaging/` - Private messages and public discussions

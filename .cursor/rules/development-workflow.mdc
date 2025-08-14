@@ -1,0 +1,156 @@
+# Development Workflow
+
+## Getting Started
+1. **Clone and Setup**
+   ```bash
+   git clone <repository-url>
+   cd bapp
+   ```
+
+2. **Environment Setup**
+   ```bash
+   # Backend
+   cd backend
+   cp env.template .env
+   # Edit .env with your local settings
+   
+   # Create virtual environment
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+
+3. **Database Setup**
+   ```bash
+   # With Docker (recommended)
+   docker-compose up -d db
+   
+   # Run migrations
+   python manage.py migrate
+   
+   # Create superuser
+   python manage.py createsuperuser
+   ```
+
+4. **Start Development Server**
+   ```bash
+   # Option 1: Individual services
+   python manage.py runserver  # Backend on :8000
+   cd ../frontend && npm start  # Frontend on :3000
+   
+   # Option 2: Docker Compose (full stack)
+   docker-compose up -d
+   ```
+
+## Branch Strategy
+- `main` - Production-ready code, auto-deploys
+- `develop` - Integration branch for features
+- `feature/feature-name` - Individual features
+- `hotfix/fix-name` - Critical production fixes
+
+## Commit Conventions
+Use conventional commit format:
+- `feat: add book search functionality`
+- `fix: resolve authentication token expiry`
+- `docs: update API documentation`
+- `style: format code with black`
+- `refactor: extract user service functions`
+- `test: add tests for book exchange flow`
+
+## Development Commands
+
+### Backend (Django)
+```bash
+cd backend
+source venv/bin/activate
+
+# Database
+python manage.py makemigrations
+python manage.py migrate
+python manage.py shell
+
+# Testing
+python manage.py test
+coverage run --source='.' manage.py test
+coverage report
+
+# Code Quality
+black .
+isort .
+flake8 .
+
+# Server
+python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
+```
+
+### Frontend (React)
+```bash
+cd frontend
+
+# Dependencies
+npm install
+npm ci  # Clean install
+
+# Development
+npm start
+npm test
+npm run build
+
+# Linting
+npm run lint
+npm run lint:fix
+```
+
+### Infrastructure
+```bash
+cd infra
+
+# Initialize
+terraform init
+
+# Plan changes
+terraform plan -var-file="terraform.tfvars"
+
+# Apply changes
+terraform apply -var-file="terraform.tfvars"
+
+# Destroy (careful!)
+terraform destroy -var-file="terraform.tfvars"
+```
+
+## Testing Strategy
+- **Backend**: Django test framework with fixtures
+- **Frontend**: React Testing Library and Jest
+- **Integration**: API endpoint testing
+- **E2E**: Consider Playwright for critical user flows
+
+## Code Review Process
+1. Create feature branch from `develop`
+2. Implement feature with tests
+3. Run local quality checks
+4. Create Pull Request to `develop`
+5. Automated CI/CD runs tests
+6. Code review by team member
+7. Merge to `develop`
+8. Deploy to staging for testing
+9. Merge `develop` to `main` for production
+
+## Debugging
+- **Backend**: Django debug toolbar, logging
+- **Frontend**: React Developer Tools
+- **Database**: Django admin, database client
+- **API**: Django-Ninja docs at `/api/docs`
+
+## Performance Monitoring
+- Monitor database query performance
+- Use Django's `django-debug-toolbar` in development
+- Monitor API response times
+- Check frontend bundle size and load times
+
+## Security Considerations
+- Never commit secrets or API keys
+- Use environment variables for configuration
+- Regularly update dependencies
+- Follow OWASP guidelines for web applications
+- Review security scan results in CI/CD pipeline

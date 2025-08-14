@@ -1,0 +1,16 @@
+---
+alwaysApply: true
+---
+
+# What is this app?
+
+We are building a social media around book sharing. Book sharing is the vector to build and extend community and meet people with the same interests. 
+
+## Core features
+
+- create an account
+- invite friends
+- add books (for now input full information but later the plan is to take a picture of your bookshelf and automate it)
+- discuss about books (both private chat and public comments)
+- exchange books
+- search for books amongst your friends, amongst friends of friends, and geo-localized search.

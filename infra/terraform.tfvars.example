@@ -1,0 +1,7 @@
+project_id = "your-gcp-project-id"
+project_name = "bookexchange"
+region = "europe-west2"
+zone = "europe-west2-a"
+database_name = "bookexchange"
+database_user = "bookexchange"
+database_password = "your-secure-password" 

@@ -1,0 +1,83 @@
+# API Design Patterns
+
+## RESTful Conventions
+Follow these URL patterns for consistency across all endpoints:
+
+### Resource Collections
+- `GET /api/books/` - List all books
+- `POST /api/books/` - Create a new book
+- `GET /api/books/{id}` - Get specific book
+- `PUT /api/books/{id}` - Update specific book
+- `DELETE /api/books/{id}` - Delete specific book
+
+### Nested Resources
+- `GET /api/users/{id}/books/` - Get user's books
+- `POST /api/users/{id}/friends/` - Send friend request
+- `GET /api/exchanges/{id}/messages/` - Get exchange messages
+
+## Authentication Patterns
+All protected endpoints should use the JWT authentication pattern from [backend/accounts/api.py](mdc:backend/accounts/api.py):
+
+```python
+from accounts.api import auth
+
+@router.get("/protected-endpoint", auth=auth)
+def protected_endpoint(request):
+    user = request.auth  # Authenticated user object
+    return {"message": f"Hello {user.display_name}"}
+```
+
+## Request/Response Schemas
+Use Pydantic models for all request and response validation:
+
+```python
+from pydantic import BaseModel
+from typing import List, Optional
+
+class BookCreateSchema(BaseModel):
+    title: str
+    authors: List[str]
+    isbn_13: Optional[str] = None
+
+class BookResponseSchema(BaseModel):
+    id: int
+    title: str
+    authors: List[str]
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True
+```
+
+## Error Handling
+- Use appropriate HTTP status codes
+- Return consistent error response format
+- Handle validation errors gracefully
+- Log errors for debugging
+
+## Pagination
+For list endpoints that might return many results:
+- Use query parameters: `?page=1&limit=20`
+- Return pagination metadata in response
+- Default limit should be reasonable (e.g., 20-50 items)
+
+## Filtering and Search
+- Use query parameters for filtering: `?status=available&genre=fiction`
+- Implement search with `?search=query` parameter
+- Support multiple filter combinations
+
+## API Documentation
+- All endpoints are automatically documented at `/api/docs`
+- Include comprehensive docstrings for all endpoints
+- Use descriptive parameter names and types
+- Document expected response formats
+
+## Router Organization
+Each Django app should have its own API router:
+- [backend/accounts/api.py](mdc:backend/accounts/api.py) - Authentication and user management
+- [backend/books/api.py](mdc:backend/books/api.py) - Book catalog and collections
+- [backend/friendships/api.py](mdc:backend/friendships/api.py) - Social connections
+- [backend/exchanges/api.py](mdc:backend/exchanges/api.py) - Book exchanges
+- [backend/messaging/api.py](mdc:backend/messaging/api.py) - Messages and discussions
+
+These routers are imported and configured in [backend/bookexchange/urls.py](mdc:backend/bookexchange/urls.py).

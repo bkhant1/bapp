@@ -1,0 +1,48 @@
+# Django Backend Coding Standards
+
+## Django-Ninja API Development
+
+### Models
+- Use descriptive model names and follow Django conventions
+- Include comprehensive docstrings for all models
+- Use `settings.AUTH_USER_MODEL` for user references
+- Include `created_at` and `updated_at` timestamps where applicable
+- Use proper field validators and choices
+- Reference example: [backend/accounts/models.py](mdc:backend/accounts/models.py)
+
+### API Endpoints (Django-Ninja)
+- Follow RESTful conventions for URL patterns
+- Use Pydantic schemas for request/response validation
+- Include comprehensive docstrings for all endpoints
+- Implement proper authentication using the JWTAuth class
+- Reference example: [backend/accounts/api.py](mdc:backend/accounts/api.py)
+
+### Authentication
+- Use the custom JWT authentication system defined in [backend/accounts/api.py](mdc:backend/accounts/api.py)
+- Always include `auth=auth` parameter for protected endpoints
+- Store JWT settings in Django settings under `JWT_SETTINGS`
+
+### Database
+- Use PostgreSQL-compatible field types
+- Always create migrations: `python manage.py makemigrations`
+- Run migrations: `python manage.py migrate`
+- Database configuration is in [backend/bookexchange/settings.py](mdc:backend/bookexchange/settings.py)
+
+### Environment Variables
+- Use python-decouple for environment variable management
+- All sensitive data should be in environment variables
+- Reference [backend/env.template](mdc:backend/env.template) for required variables
+- Use `config()` function from decouple for reading env vars
+
+### Code Quality
+- Follow PEP 8 style guidelines
+- Use Black for code formatting: `black .`
+- Use isort for import sorting: `isort .`
+- Use flake8 for linting: `flake8 .`
+- Maximum line length: 88 characters (Black default)
+
+### Testing
+- Write tests for all API endpoints
+- Use Django's test framework
+- Test files should end with `_test.py` or be in `tests/` directory
+- Run tests: `python manage.py test`
