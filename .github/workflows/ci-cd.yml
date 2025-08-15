@@ -112,8 +112,8 @@ jobs:
         cd frontend
         npm run build
 
-  build-and-deploy:
-    needs: [test-backend, test-frontend, terraform-apply]
+  build-images:
+    needs: [test-backend, test-frontend]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     
@@ -149,6 +149,23 @@ jobs:
         docker push $REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$FRONTEND_IMAGE:$GITHUB_SHA
         docker tag $REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$FRONTEND_IMAGE:$GITHUB_SHA $REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$FRONTEND_IMAGE:latest
         docker push $REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$FRONTEND_IMAGE:latest
+
+  deploy-services:
+    needs: [build-images, terraform-apply]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
     
     - name: Deploy to Cloud Run
       run: |
@@ -227,7 +244,7 @@ jobs:
   terraform-apply:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [test-backend, test-frontend]
+    needs: [test-backend, test-frontend, build-images]
     
     steps:
     - uses: actions/checkout@v4
