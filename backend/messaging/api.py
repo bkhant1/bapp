@@ -12,4 +12,4 @@ def list_messages(request):
 @router.post("/send")
 def send_message(request):
     """Send message - placeholder"""
-    return {"message": "Message sent - Coming Soon"} 
+    return {"message": "Message sent - Coming Soon"}

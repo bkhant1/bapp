@@ -45,11 +45,24 @@ class ApiService {
   }
 
   // Helper method to handle API errors
-  private handleError(error: any): never {
+  private handleError(error: unknown): never {
+    interface ErrorWithResponse {
+      response?: {
+        data?: {
+          error?: string;
+          details?: Record<string, string[]> | string;
+        };
+        status?: number;
+      };
+      message?: string;
+    }
+
+    const errorObj = error as ErrorWithResponse;
+    const rawDetails = errorObj.response?.data?.details;
     const apiError: ApiError = {
-      error: error.response?.data?.error || error.message || 'An error occurred',
-      details: error.response?.data?.details,
-      status: error.response?.status || 500,
+      error: errorObj.response?.data?.error || errorObj.message || 'An error occurred',
+      details: typeof rawDetails === 'string' ? undefined : rawDetails,
+      status: errorObj.response?.status || 500,
     };
     throw apiError;
   }
@@ -148,7 +161,7 @@ class ApiService {
   }
 
   // Friendship endpoints (placeholder - to be implemented)
-  async getFriendships(): Promise<any> {
+  async getFriendships(): Promise<unknown> {
     try {
       const response = await this.api.get('/friends/');
       return this.handleResponse(response);
@@ -157,7 +170,7 @@ class ApiService {
     }
   }
 
-  async sendFriendRequest(): Promise<any> {
+  async sendFriendRequest(): Promise<unknown> {
     try {
       const response = await this.api.post('/friends/request');
       return this.handleResponse(response);
@@ -167,7 +180,7 @@ class ApiService {
   }
 
   // Exchange endpoints (placeholder - to be implemented)
-  async getExchanges(): Promise<any> {
+  async getExchanges(): Promise<unknown> {
     try {
       const response = await this.api.get('/exchanges/');
       return this.handleResponse(response);
@@ -176,7 +189,7 @@ class ApiService {
     }
   }
 
-  async requestExchange(): Promise<any> {
+  async requestExchange(): Promise<unknown> {
     try {
       const response = await this.api.post('/exchanges/request');
       return this.handleResponse(response);
@@ -186,7 +199,7 @@ class ApiService {
   }
 
   // Message endpoints (placeholder - to be implemented)
-  async getMessages(): Promise<any> {
+  async getMessages(): Promise<unknown> {
     try {
       const response = await this.api.get('/messages/');
       return this.handleResponse(response);
@@ -195,7 +208,7 @@ class ApiService {
     }
   }
 
-  async sendMessage(): Promise<any> {
+  async sendMessage(): Promise<unknown> {
     try {
       const response = await this.api.post('/messages/send');
       return this.handleResponse(response);

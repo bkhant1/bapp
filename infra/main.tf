@@ -7,6 +7,11 @@ terraform {
       version = "~> 5.0"
     }
   }
+  
+  backend "gcs" {
+    bucket = "bookexchange-terraform-state"
+    prefix = "terraform/state"
+  }
 }
 
 # Configure the Google Cloud Provider

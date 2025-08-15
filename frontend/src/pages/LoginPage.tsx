@@ -44,7 +44,7 @@ const LoginPage: React.FC = () => {
     try {
       await login(formData);
       navigate('/dashboard');
-    } catch (err) {
+    } catch {
       setFormError('Invalid email or password');
     }
   };

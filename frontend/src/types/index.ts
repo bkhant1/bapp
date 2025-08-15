@@ -14,9 +14,9 @@ export interface User {
 
 export interface UserProfile {
   user: User;
-  reading_preferences: Record<string, any>;
+  reading_preferences: Record<string, unknown>;
   favorite_genres: string[];
-  reading_goals: Record<string, any>;
+  reading_goals: Record<string, unknown>;
   website?: string;
   twitter?: string;
   instagram?: string;

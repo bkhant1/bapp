@@ -35,6 +35,18 @@ staticfiles/
 .env.production
 .env.development
 
+# Security & Secrets
+*.json.key
+*key*.json
+*secret*.json
+*credentials*.json
+*.pem
+*.p12
+*.key
+service-account*.json
+github-actions-key.json
+gcp-*.json
+
 # Node.js
 node_modules/
 npm-debug.log*

@@ -12,4 +12,4 @@ def list_exchanges(request):
 @router.post("/request")
 def request_exchange(request):
     """Request book exchange - placeholder"""
-    return {"message": "Exchange requested - Coming Soon"} 
+    return {"message": "Exchange requested - Coming Soon"}

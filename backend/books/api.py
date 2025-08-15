@@ -1,7 +1,8 @@
-from ninja import Router
-from typing import List
-from pydantic import BaseModel
 from datetime import datetime
+from typing import List
+
+from ninja import Router
+from pydantic import BaseModel
 
 router = Router()
 
@@ -23,6 +24,7 @@ class BookSchema(BaseModel):
 def list_books(request):
     """List all books"""
     from .models import Book
+
     return Book.objects.all()[:20]
 
 
@@ -30,6 +32,8 @@ def list_books(request):
 def get_book(request, book_id: int):
     """Get book by ID"""
     from django.shortcuts import get_object_or_404
+
     from .models import Book
+
     book = get_object_or_404(Book, id=book_id)
-    return book 
+    return book

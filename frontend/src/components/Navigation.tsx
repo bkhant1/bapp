@@ -16,7 +16,6 @@ import {
   Search as SearchIcon,
   Notifications as NotificationsIcon,
   Message as MessageIcon,
-  AccountCircle,
   MenuBook,
   Group,
   SwapHoriz,
@@ -66,7 +65,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-interface NavigationProps {}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface NavigationProps {
+  // Component props can be added here when needed
+}
 
 const Navigation: React.FC<NavigationProps> = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -90,6 +92,7 @@ const Navigation: React.FC<NavigationProps> = () => {
   const handleSearch = (event: React.FormEvent) => {
     event.preventDefault();
     // TODO: Implement search functionality
+    console.log('Search functionality to be implemented');
   };
 
   const isMenuOpen = Boolean(anchorEl);
@@ -155,15 +158,17 @@ const Navigation: React.FC<NavigationProps> = () => {
           </Button>
         </Box>
 
-        <Search>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search books..."
-            inputProps={{ 'aria-label': 'search' }}
-          />
-        </Search>
+        <Box component="form" onSubmit={handleSearch}>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search books..."
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
+        </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
           <IconButton

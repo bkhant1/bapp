@@ -12,4 +12,4 @@ def list_friendships(request):
 @router.post("/request")
 def send_friend_request(request):
     """Send friend request - placeholder"""
-    return {"message": "Friend request sent - Coming Soon"} 
+    return {"message": "Friend request sent - Coming Soon"}
