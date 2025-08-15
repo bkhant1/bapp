@@ -277,7 +277,7 @@ resource "google_cloud_run_service_iam_member" "frontend_public" {
 resource "google_project_iam_member" "artifact_registry_reader" {
   project = var.project_id
   role    = "roles/artifactregistry.reader"
-  member  = "serviceAccount:${var.project_id}-compute@developer.gserviceaccount.com"
+  member  = "serviceAccount:1036566880412-compute@developer.gserviceaccount.com"
 }
 
 # VPC Access Connector for Cloud Run to access Cloud SQL
