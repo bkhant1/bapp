@@ -31,7 +31,8 @@ resource "google_project_service" "apis" {
     "storage.googleapis.com",
     "secretmanager.googleapis.com",
     "vpcaccess.googleapis.com",
-    "redis.googleapis.com"
+    "redis.googleapis.com",
+    "servicenetworking.googleapis.com"
   ])
 
   service = each.value
@@ -68,7 +69,7 @@ resource "google_sql_database_instance" "postgres" {
     ip_configuration {
       ipv4_enabled    = true
       private_network = google_compute_network.vpc.id
-      require_ssl     = false
+      ssl_mode        = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
     }
 
     backup_configuration {
