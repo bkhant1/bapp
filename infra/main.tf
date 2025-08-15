@@ -32,7 +32,8 @@ resource "google_project_service" "apis" {
     "secretmanager.googleapis.com",
     "vpcaccess.googleapis.com",
     "redis.googleapis.com",
-    "servicenetworking.googleapis.com"
+    "servicenetworking.googleapis.com",
+    "artifactregistry.googleapis.com"
   ])
 
   service = each.value
@@ -143,6 +144,17 @@ resource "random_id" "bucket_suffix" {
   byte_length = 8
 }
 
+# Artifact Registry Repository for Docker images
+resource "google_artifact_registry_repository" "docker_repo" {
+  repository_id = "${var.project_name}-repo"
+  location      = var.region
+  format        = "DOCKER"
+  
+  description = "Docker repository for ${var.project_name} container images"
+
+  depends_on = [google_project_service.apis]
+}
+
 # Cloud Run Service for Backend
 resource "google_cloud_run_service" "backend" {
   name     = "${var.project_name}-backend"
@@ -151,7 +163,7 @@ resource "google_cloud_run_service" "backend" {
   template {
     spec {
       containers {
-        image = "gcr.io/${var.project_id}/${var.project_name}-backend:latest"
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.docker_repo.repository_id}/${var.project_name}-backend:latest"
         
         ports {
           container_port = 8000
@@ -211,7 +223,7 @@ resource "google_cloud_run_service" "frontend" {
   template {
     spec {
       containers {
-        image = "gcr.io/${var.project_id}/${var.project_name}-frontend:latest"
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.docker_repo.repository_id}/${var.project_name}-frontend:latest"
         
         ports {
           container_port = 80
@@ -259,6 +271,13 @@ resource "google_cloud_run_service_iam_member" "frontend_public" {
   location = google_cloud_run_service.frontend.location
   role     = "roles/run.invoker"
   member   = "allUsers"
+}
+
+# Grant Artifact Registry Reader permission to default Compute Engine service account
+resource "google_project_iam_member" "artifact_registry_reader" {
+  project = var.project_id
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:${var.project_id}-compute@developer.gserviceaccount.com"
 }
 
 # VPC Access Connector for Cloud Run to access Cloud SQL
